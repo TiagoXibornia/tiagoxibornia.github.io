@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Calculadora de Surebet</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      background-color: #f0f0f0;
+    }
+    .container {
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      width: 300px;
+    }
+    h1 {
+      text-align: center;
+      font-size: 1.5em;
+      margin-bottom: 20px;
+    }
+    label {
+      font-size: 1em;
+      margin-bottom: 10px;
+      display: block;
+    }
+    input {
+      width: 100%;
+      padding: 8px;
+      margin-bottom: 10px;
+      border-radius: 5px;
+      border: 1px solid #ddd;
+      font-size: 1em;
+    }
+    button {
+      width: 100%;
+      padding: 10px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      font-size: 1.2em;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #45a049;
+    }
+    .result {
+      margin-top: 20px;
+    }
+    .result p {
+      font-size: 1.1em;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h1>Calculadora de Surebet</h1>
+    
+    <label for="oddA">Odd A</label>
+    <input type="number" id="oddA" placeholder="Insira Odd A">
+    
+    <label for="oddB">Odd B</label>
+    <input type="number" id="oddB" placeholder="Insira Odd B">
+    
+    <label for="stakeTotal">Valor total da aposta</label>
+    <input type="number" id="stakeTotal" placeholder="Insira o valor total">
+    
+    <button onclick="calcularSurebet()">Calcular</button>
+    
+    <div class="result" id="result"></div>
+  </div>
+
+  <script>
+    function calcularSurebet() {
+      // Pegando os valores inseridos
+      const oddA = parseFloat(document.getElementById("oddA").value);
+      const oddB = parseFloat(document.getElementById("oddB").value);
+      const stakeTotal = parseFloat(document.getElementById("stakeTotal").value);
+      
+      // Verificar se todos os valores são válidos
+      if (isNaN(oddA) || isNaN(oddB) || isNaN(stakeTotal) || oddA <= 0 || oddB <= 0 || stakeTotal <= 0) {
+        alert("Por favor, preencha todos os campos corretamente com valores válidos.");
+        return;
+      }
+
+      // Teste para verificar se a função está pegando os valores corretamente
+      console.log("Odd A:", oddA, "Odd B:", oddB, "Total aposta:", stakeTotal);
+      
+      // Cálculos da surebet
+      const percentTotal = (1 / oddA + 1 / oddB) * 100;
+      const resultElement = document.getElementById("result");
+
+      if (percentTotal > 0 && percentTotal < 100) {
+        const stakeA = ((oddB * stakeTotal) / (oddA + oddB)).toFixed(2);
+        const stakeB = ((oddA * stakeTotal) / (oddA + oddB)).toFixed(2);
+        const profit = (Math.min(stakeA * oddA, stakeB * oddB) - stakeTotal).toFixed(2);
+
+        resultElement.innerHTML = `
+          <p><strong>Percentual total:</strong> ${percentTotal.toFixed(2)}%</p>
+          <p><strong>Aposte:</strong> R$ ${stakeA} na Odd A</p>
+          <p><strong>Aposte:</strong> R$ ${stakeB} na Odd B</p>
+          <p><strong>Lucro garantido:</strong> R$ ${profit}</p>
+        `;
+      } else {
+        resultElement.innerHTML = "<p><strong>Sem surebet! Verifique as odds inseridas.</strong></p>";
+      }
+    }
+  </script>
+
+</body>
+</html>
